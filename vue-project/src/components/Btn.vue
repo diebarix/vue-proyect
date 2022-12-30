@@ -1,15 +1,15 @@
 <template>
-    <button :style="{backgroundColor}" @click.prevent="$emit('click')" :class="{circle : applyCircleClass}">
+    <button :style="{backgroundColor}" @click.prevent="$emit('click')" :class="{circle : applyCircleClass}" v-bind="$attrs">
         <slot />
     </button>
 </template>
 
-<script>
+<script setup>
 //Este boton los podemos reutilizar donde queramos
-export default {
-    //Definimos el tipo de boton
-    props: {
-        type: {
+import { computed } from "vue";
+
+const props = defineProps({
+    variant: {
                 required: false,
                 default: "success",
             //Restringo a ciertos valores esta propiedad
@@ -24,29 +24,25 @@ export default {
             default: false,
             type: Boolean,
         }
-    },
-    //Ponemos las opciones como propiedad
-    computed: {
-            backgroundColor() {
-                const options = {
+})
+
+const emit = defineEmits(['click'])
+
+const backgroundColor = computed(() => {
+    const options = {
                     danger: "var(--danger-color)",
                     info: "var(--info-color)",
                     warning: "var(--warning-color)",success: "var(--accent-color)",
                     secondary: "var(--secondary-color)",
                 }
 
-                return options[this.type];
-            },
-            //Es una funcion que se ejecuta y se asigna como propiedad
-            applyCircleClass() {
-        // Si esto devuelve true, esto se asigna a una propiedad
-                return this.circle;
-            }
-        },
+                return options[props.variant];
+})
 
+const applyCircleClass = computed(() => {
+    return props.circle;
+})
 
-    emits: ['click'],
-}
 </script>
 
 <style scoped>
@@ -57,6 +53,10 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.btn:disabled {
+    opacity: 80%;
 }
 
 .circle{

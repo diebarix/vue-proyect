@@ -17,48 +17,46 @@
 </div>
 </template>
 
-<script>
+<script setup>
 //v-if elimina el html del dom si es falso
 //v-show cambia el display none de css automaticamente
 //window.addEventListener("click", e => console.log(e.target))
+ import { reactive, onMounted, onBeforeUnmount } from "vue";
 
-export default {
-    props: {
-        show: {
+const props = defineProps({
+  show: {
             default: false
         }
-    },
-    emits: ['close'],
+})
 
-    data() {
-        return {
-//Guardamos el evento para tener la referencia y luego poder eliminarlo
-//Ya que todo evento despues de usarlo debe ser eleminado para no causar memory leak
-            clickListener: (e) => {
+const emit = defineEmits(['close'])
+
+const clickListener = reactive(
+            (e) => {
             if (e.target === this.$refs.modal) {
                 this.$emit('close');
             }
-            },
-    //Si pulsamos la tecla escape emitimos tambien el evento close para que lo cierre
-            closeOnEscapeListener: e => {
-                if (e.key === "Escape") {
-                    this.$emit('close')
+            })
+
+const closeOnEscapeListener = reactive(
+            e => {
+              if (e.key === "Escape") {
+                  this.$emit('close')
                 }
-            }
-        }
-    },
+            })
 
-    mounted() {
+onMounted(() => {
         //Es una poco antiintuitivo pero tenemos que poner que si le das click al modal se cierre ya que toda la pantalla se convierte en el modal y si le das en algo adentro, o input, submit, etc, lo toma como algo especifico, y no el "modal" general
-        window.addEventListener("click", this.clickListener),
-        window.addEventListener("keydown", this.closeOnEscapeListener)
-    },
+        window.addEventListener("click", clickListener),
+        window.addEventListener("keydown", closeOnEscapeListener)
+})
 
-    beforeUnmount() {
-        window.removeEventListener("click", this.clickListener)
-        window.removeEventListener("keydown", this.closeOnEscapeListener)
-    }
-}
+onBeforeUnmount(() => {
+  window.removeEventListener("click", clickListener)
+  window.removeEventListener("keydown", closeOnEscapeListener)
+})
+
+
 </script>
 
 <style scoped>

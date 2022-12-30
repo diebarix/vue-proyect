@@ -1,18 +1,16 @@
 <template>
     <div v-if="show" class="alert-danger" :style="{backgroundColor}">
         <div>{{ message }}</div>
-        <div @click="$emit('close')" class="close-danger">&times;</div>
+        <div @click="close" class="close-danger">&times;</div>
     </div>
     
 </template>
 
-<script>
-//en template, en close-danger, si hacemos esto @click="show = false" esta MAL, ya que estamos modificando la propiedad y no sus datos
-
-    export default {
-        //No usamos data(), ya que esto no es un dato, por que no lo controla este componente, si no, que es una propiedad del componente "padre", por eso se lo pasamo por props
-            //props: ["show", "message", "type"],
-        props: {
+<script setup>
+import { computed } from "vue";
+//Solamente con <script setup> podemos hacer defineProps()
+//defineProps No es una funcion
+const props = defineProps({
             message: {
                 required: true,
                 type: String
@@ -21,30 +19,33 @@
                 required: true,
                 type: Boolean,
             },
-            type: {
+            variant: {
                 required: false,
                 default: "danger",
             //Restringo a ciertos valores esta propiedad
                 validator(value) {
-                    return ["danger", "warning", "info"].includes(value);
+                    return ["danger", "warning", "info", "success", "secondary"].includes(value);
                 }
             }
-        }, 
-        //Propiedades especiales
-        computed: {
-            backgroundColor() {
+})
+    const emit = defineEmits(['close'])
+
+    const backgroundColor = computed(() => {
                 const options = {
                     danger: "var(--danger-color)",
                     info: "var(--info-color)",
-                    warning: "var(--warning-color)",
-                }
+                    warning: "var(--warning-color)",success: "var(--accent-color)",
+                    secondary: "var(--secondary-color)",
+                }    
 
-                return options[this.type];
-            }
-        },
+                return options[props.variant];
+            })
+
+function close() {
+    emit('close')
+}
 
         //Eventos que emite este componente
-        emits: ['close'],
 
 /*        methods: {
             closeAlert() {
@@ -52,7 +53,7 @@
                 this.$emit("close")
             }
         }*/
-    }
+
 </script>
 
 <style scoped>
