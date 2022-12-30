@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { BackgroundColorProps, useBackgroundColor } from "../composables/backgroundColor";
 //Solamente con <script setup> podemos hacer defineProps()
 //defineProps No es una funcion
 const props = defineProps({
@@ -19,27 +19,12 @@ const props = defineProps({
                 required: true,
                 type: Boolean,
             },
-            variant: {
-                required: false,
-                default: "danger",
-            //Restringo a ciertos valores esta propiedad
-                validator(value) {
-                    return ["danger", "warning", "info", "success", "secondary"].includes(value);
-                }
-            }
+            ...BackgroundColorProps
 })
     const emit = defineEmits(['close'])
 
-    const backgroundColor = computed(() => {
-                const options = {
-                    danger: "var(--danger-color)",
-                    info: "var(--info-color)",
-                    warning: "var(--warning-color)",success: "var(--accent-color)",
-                    secondary: "var(--secondary-color)",
-                }    
+    const backgroundColor = useBackgroundColor(props)
 
-                return options[props.variant];
-            })
 
 function close() {
     emit('close')

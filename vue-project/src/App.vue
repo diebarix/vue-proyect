@@ -10,7 +10,7 @@
       v-model="editTodoForm.todo.title"
     />
 
-    <Alert :message="alert.message" v-bind:show="alert.show" @close="alert.show = false" :variant = "alert.variant"
+    <Alert :message="alert.message" :show="alert.show" @close="alert.show = false" :variant = "alert.variant"
     />
     
     <section>
@@ -37,16 +37,15 @@ import Todo from "./components/Todo.vue";
 import Spinner from "./components/Spinner.vue"
 import axios from "axios"
 import EditTodoForm from "./components/EditTodoForm.vue";
-import { ref, reactive } from "vue";
+import { useFetch } from "./composables/fetch";
+import { ref, reactive, watch } from "vue";
 
     //Cuando usamos "ref" siempre para acceder a el tiene que ser con ".value"
-    const todos = ref([])
     const alert = reactive({
       show: false,
       message: "",
       variant: "danger"
     })
-    const isLoading = ref(false)
     const isPostingTodo = ref(false)
     const editTodoForm = reactive({
       show: false,
@@ -56,23 +55,10 @@ import { ref, reactive } from "vue";
           }
     })
 
-    async function fetchTodos() {
-        isLoading.value = true
-        try {
-          const res = await axios.get('/api/todos')
-          //const res = await fetch('http://localhost:8080/todos')
-          //this.todos = await res.json()
-          //con axios no hace falta el await
-          todos.value = await res.data
-
-        } catch (e) {
-          showAlert("Failed loading todos")
-        }
-        isLoading.value = false
-      }
-
-      fetchTodos()
-
+const { data: todos, isLoading } = useFetch("/api/todos", {
+  onError: () => showAlert("Failed loading todos")
+})
+//Mira el ref y cuando cambie ponga el valor nuevo y el antiguo
       function showAlert(message, variant = "danger") {
         alert.show = true
         alert.message = message

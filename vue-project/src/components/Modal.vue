@@ -21,7 +21,7 @@
 //v-if elimina el html del dom si es falso
 //v-show cambia el display none de css automaticamente
 //window.addEventListener("click", e => console.log(e.target))
- import { reactive, onMounted, onBeforeUnmount } from "vue";
+ import {ref, reactive, onMounted, onBeforeUnmount } from "vue";
 
 const props = defineProps({
   show: {
@@ -29,21 +29,23 @@ const props = defineProps({
         }
 })
 
+const modal = ref(null)
+
 const emit = defineEmits(['close'])
 
-const clickListener = reactive(
+const clickListener = 
             (e) => {
-            if (e.target === this.$refs.modal) {
-                this.$emit('close');
+            if (e.target === modal.value) {
+                emit('close');
             }
-            })
+            }
 
-const closeOnEscapeListener = reactive(
+const closeOnEscapeListener = 
             e => {
               if (e.key === "Escape") {
-                  this.$emit('close')
+                  emit('close')
                 }
-            })
+            }
 
 onMounted(() => {
         //Es una poco antiintuitivo pero tenemos que poner que si le das click al modal se cierre ya que toda la pantalla se convierte en el modal y si le das en algo adentro, o input, submit, etc, lo toma como algo especifico, y no el "modal" general
