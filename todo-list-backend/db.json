@@ -1,11 +1,11 @@
 {
   "todos": [
     {
-      "title": "pasear al perro 1",
+      "title": "pasear al perro 2",
       "id": 1
     },
     {
-      "title": "aaaaas",
+      "title": "a",
       "id": 3
     },
     {
@@ -23,10 +23,6 @@
     {
       "title": "gfd",
       "id": 7
-    },
-    {
-      "title": "hfg",
-      "id": 8
     }
   ]
 }
