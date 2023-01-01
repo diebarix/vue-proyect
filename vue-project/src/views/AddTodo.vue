@@ -1,28 +1,30 @@
 <template>
-<Spinner class="spinner" v-if="isLoading" />
+<Spinner class="spinner" v-if="isPostingTodo" />
 
 <Alert :message="alert.message" :show="alert.show" variant="danger"/>
 
-<div v-if="todo !== null" class="form">
-  <h1>Edit Todo</h1>
+<div class="form">
+  <h1>Add Todo</h1>
   <form class="edit-todo-form">
       <div>
         <label>Title </label>
       </div>
-      <input type="text" v-model="todo.title"/>
+      <input type="text" v-model="todos.title"/>
+
       <div>
         <label>Description</label>
       </div>
-      <input type="text" v-model="todo.description"/>
+      <input type="text" v-model="todos.description"/>
+
       <div>
         <label>Date</label>
       </div>
-      <input type="date" v-model="todo.date"/>
+      <input type="date" v-model="todos.date"/>
   </form>
 
   <div class="submit">
-    <Btn :disabled="isUpdatingTodo" @click="submit">
-    <Spinner v-if="isUpdatingTodo"/>
+    <Btn :disabled="isPostingTodo" @click="submit">
+    <Spinner v-if="isPostingTodo"/>
     <span v-else>Submit</span>
     </Btn>
   </div>
@@ -31,39 +33,44 @@
 
 <script setup>
 import Btn from "@/components/Btn.vue";
-import { useFetch } from "../composables/fetch.js";
 import Spinner from "../components/Spinner.vue";
 import Alert from "../components/ShowAlert.vue";
 import { reactive, ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
-const props = defineProps(['id'])
-
 const alert = reactive({message: "", show: false})
-
-const isUpdatingTodo = ref(false)
 
 const router = useRouter()
 
-
-const { data: todo, isLoading} = useFetch(`/api/todos/${props.id}`, {
-  onError: () => {
-    alert.show = true
-    alert.message = "Failed loading todos"
-  }
+/*const Title = ref("")
+const Description = ref("")
+const Date = ref("")*/
+const todos = reactive({
+    type: Object,
+    default: () => ({
+      title: "",
+      description: "",
+      date: null,
+    }),
 })
 
-async function submit() {
-  isUpdatingTodo.value = true
+const isPostingTodo = ref(false)
+
+  async function submit() {
   try {
-    await axios.put(`/api/todos/${props.id}`, todo.value)
-    router.push('/')
+    isPostingTodo.value = true
+    await axios.post('/api/todos', {
+      title: todos.title,
+      description: todos.description,
+      date: todos.date
+        })
+  router.push("/")
   } catch (e) {
     alert.show = true
     alert.message = "Failed updating todo"
   }
-  isUpdatingTodo.value = false
+  isPostingTodo.value = false
 }
 </script>
 

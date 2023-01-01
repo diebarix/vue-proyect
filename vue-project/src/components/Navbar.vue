@@ -7,8 +7,9 @@
 
     <div class="link">
       <ul>
-        <li><RouterLink to="/">Home</RouterLink></li>
-        <li><RouterLink to="/about">About</RouterLink></li>
+        <li><RouterLink to="/">Home </RouterLink></li>
+        <li><RouterLink to="/todos/add">Add-Todo </RouterLink></li>
+        <li><RouterLink to="/about"> About</RouterLink></li>
       </ul>
     </div>
   </nav>
@@ -42,7 +43,7 @@
 
 .link a {
   font-size: 30px;
-  margin-left: 10px;
+  margin-left: 19px;
   text-decoration: none;
   color: var(--text-color)
 }

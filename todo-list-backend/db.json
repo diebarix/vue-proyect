@@ -2,27 +2,33 @@
   "todos": [
     {
       "title": "pasear al perro 2",
+      "description": "pepe",
+      "date": "una fechas",
       "id": 1
     },
     {
       "title": "a",
+      "description": "pepe",
+      "date": "una fechas",
       "id": 3
     },
     {
-      "title": "fsdaaa",
+      "title": "fsdaaa1",
+      "description": "pepe221",
+      "date": "una fechas",
       "id": 4
     },
     {
-      "title": "gfdaaa",
+      "title": "dasaaa",
+      "description": "sssaaaa",
+      "date": "aaaa",
       "id": 5
     },
     {
-      "title": "gfdfgdaaa",
+      "title": "bfdgdfaaa",
+      "description": "gfdgdaaaa",
+      "date": "2022-12-05",
       "id": 6
-    },
-    {
-      "title": "gfd",
-      "id": 7
     }
   ]
 }

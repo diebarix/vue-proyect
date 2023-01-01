@@ -2,6 +2,8 @@
     <section>
       <div class="todo">
         <p>{{ title }}</p>
+        <p>{{ description }}</p>
+        <p>{{ date }}</p>
         <div>
             
           <Btn circle variant="secondary" @click="$emit('edit')" class="btn edit-todo-btn"><Pencil/></Btn>
@@ -21,6 +23,14 @@
                 required: true,
                 type: String,
             },
+      description: {
+                required: true,
+                type: String,
+            },
+      date: {
+                required: true,
+                type: String,
+            },            
     })
 
     const emit = defineEmits(["remove", "edit"])
